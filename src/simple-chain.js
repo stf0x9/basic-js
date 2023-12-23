@@ -5,27 +5,52 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 const chainMaker = {
+  storage: [],
+
   getLength() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    return this.storage.length;
   },
-  addLink(/* value */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  addLink(value) {
+    
+    if (value === undefined) {
+      this.storage.push("");
+    } else {
+      this.storage.push(value);
+    }
+    
+    // this.storage.push(newValue);
+    return this;
   },
-  removeLink(/* position */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  removeLink(position) {
+
+    if (typeof position === 'number' && position-1 < this.getLength() && position-1 >= 0) {
+      const cPosition = position-1;
+      this.storage = this.storage.slice(0, cPosition).concat(this.storage.slice(cPosition + 1));
+    } else {
+      this.storage = [];
+      throw new Error('You can\'t remove incorrect link!');
+    }
+    
+    return this;
   },
   reverseChain() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    this.storage.reverse();
+    return this;
   },
   finishChain() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+    let resultingStr = '';
+    this.storage.forEach((element, index) => {
+      (index === 0) ? resultingStr += `( ${element} )` : resultingStr += `~~( ${element} )`;
+    })
+    this.storage = [];
+    return resultingStr;
+    
   }
 };
+
+const result = (chainMaker.addLink('8.963').reverseChain().reverseChain().reverseChain().reverseChain().addLink({ 0: 'first', 1: 'second', 'length': 2 }).reverseChain().addLink(3.14).addLink('DEF').reverseChain().finishChain());
+
+console.log(result)
 
 module.exports = {
   chainMaker
